@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Letter, LAssignTo,LHistory
 
-# Register your models here.
+admin.site.register(Letter)
+admin.site.register(LAssignTo)
+admin.site.register(LHistory)
