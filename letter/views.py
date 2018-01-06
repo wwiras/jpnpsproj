@@ -1,7 +1,7 @@
 from django.shortcuts import render
 # from django.utils import timezone
 from .models import Letter
-from .forms import LetterForm
+from .forms import LetterForm, LetterForm2
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 # from django_datatables_view.base_datatable_view import BaseDatatableView
@@ -14,6 +14,7 @@ def home(request):
 def letter_new(request):
 
     if request.method == "POST":
+        # form = LetterForm(request.POST)
         form = LetterForm(request.POST)
         if form.is_valid():
             letter = form.save(commit=False)
@@ -24,6 +25,7 @@ def letter_new(request):
             return redirect(reverse_lazy('letter_home'))
             # return redirect(reverse_lazy('student_detail',kwargs={'pk': student.pk }))
     else:
+        # form = LetterForm()
         form = LetterForm()
     
     return render(request, 'letter/letter_new.html', {'form': form})
