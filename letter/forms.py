@@ -6,6 +6,10 @@ from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 
 class LetterForm(forms.ModelForm):
+
+    letter_date = forms.DateField(required=False, input_formats=['%d-%m-%Y'])
+    letter_received = forms.DateField(required=False, input_formats=['%d-%m-%Y'])
+
     def __init__(self, *args, **kwargs):
         super(LetterForm, self).__init__(*args, **kwargs)
 
@@ -15,8 +19,8 @@ class LetterForm(forms.ModelForm):
 
         # self.fields['description'].widget.attrs={ 'id': 'myCustomId', 'class': 'myCustomClass', 'name': 'myCustomName', 'placeholder': 'myCustomPlaceholder'}
         # source : https://stackoverflow.com/questions/19489699/how-to-add-class-id-placeholder-attributes-to-a-field-in-django-model-forms
-        self.fields['letter_date'].widget.attrs={ 'class': 'mydatepicker','placeholder': 'DD/MM/YYYY'}
-        self.fields['letter_received'].widget.attrs={ 'class': 'mydatepicker','placeholder': 'DD/MM/YYYY'}
+        self.fields['letter_date'].widget.attrs={ 'class': 'mydatepicker','placeholder': 'DD-MM-YYYY'}
+        self.fields['letter_received'].widget.attrs={ 'class': 'mydatepicker','placeholder': 'DD-MM-YYYY'}
 
         # You can dynamically adjust your layout
         # self.helper.layout.append(Submit('save', 'save'))

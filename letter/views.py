@@ -10,7 +10,8 @@ import datetime
 
 # Create your views here.
 def home(request):
-    return render(request, 'base_ori.html')
+    # return render(request, 'base_ori.html')
+    return render(request, 'base.html')
 
 def letter_new(request):
 
