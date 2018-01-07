@@ -19,5 +19,5 @@ urlpatterns = [
     # url(r'^post/new/$', views.post_new, name='post_new'),
     # url(r'^post/(?P<pk>\d+)/edit/$', views.post_edit, name='post_edit'),
     # url(r'student_list/$', views.StudentListJson.as_view(), name="student_list_json"),
-    # url(r'^student_list/$', views.StudentListJson, name="student_list_json"),
+    url(r'^letter_list_json/$', views.LetterListJson.as_view(), name="letter_list_json"),
 ]

@@ -2,24 +2,11 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<!-- <div class="container"> -->
-	<!-- <div class="row"> -->
-    <h5>Registering New Letter<h5>
+  <div class="page-header">
+    <h2>Registering New Letter</h2>
+  </div>
     {% crispy form %}
-    <div class='col-sm-6'>
-        <div class="form-group">
-          <div class='input-group date' >
-            <!-- <input type='text' class="form-control dateinput" id='date' name='date' /> -->
-            <input class="form-control " id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
-            <input class="form-control mydatepicker" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
-          </div>
-        </div>
-    </div>    
-   	<!-- </div> -->
-<!-- </div> -->
+  <br>
 {% endblock %}
 
 
