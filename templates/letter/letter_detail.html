@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block head_title %}{% trans "SPMICT - Letter Registration System" %}{% endblock %}
+
+{% block content %}
+<legend>SPMICT - Letter Detail</legend>
+<div class="table-responsive">
+  <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% if letter %}
+        <tr>
+          <td>{% trans "Ref. Num" %}</td>  
+          <td>{{ letter.letter_ref }}</td>  
+        </tr>
+        <tr>
+          <td>{% trans "Date Received" %}</td>  
+          <td>{{ letter.letter_received|date:"d - M - Y" }}</td>  
+        </tr>
+        <tr>
+          <td>{% trans "Sector Ref. Num" %}</td>  
+          {% if letter.sector_ref %}  
+            <td>{{ letter.sector_ref }}</td>
+          {% else %}
+            <td>N/A</td>
+          {% endif %}  
+        </tr>
+        <tr>
+          <td>{% trans "Letter Date" %}</td>  
+          <td>{{ letter.letter_date|date:"d - M - Y" }}</td>  
+        </tr>
+         <tr>
+          <td>{% trans "From" %}</td>  
+          <td>{{ letter.letter_from }}</td>  
+        </tr>
+        <tr>
+          <td>{% trans "Description" %}</td>  
+          <td>{{ letter.letter_desc }}</td>  
+        </tr>
+      
+        <tr>
+            <td>{% trans "Assigned to" %}</td>  
+            {% if letter.assigned_to %}  
+              <td>{{ letter.assigned_to }}</td>
+            {% else %}
+              <td>{ N/A }</td>
+            {% endif %}   
+        </tr>
+
+        <tr>
+          <td>{% trans "Created Date" %}</td>  
+          <td>{{ letter.created_date|date:"d - M - Y P" }}</td>  
+        </tr>
+
+      {% else %}
+      <tr>
+        <td colspan="2" align="center">No Information available for this letter </td>
+      <tr>
+      {% endif %}
+      </tbody>
+  </table>
+</div>
+
+ <p class="text-center">
+      <a href="{% url 'letter_edit' letter.pk %}" class="btn btn-primary" >Edit Letter</a>
+      <a href="{% url 'letter_remove' letter.pk %}" class="btn btn-primary" >Remove Letter</a>
+    </p>
+{% endblock %}

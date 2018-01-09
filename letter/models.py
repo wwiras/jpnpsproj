@@ -7,16 +7,15 @@ class LAssignTo(models.Model):
     desc = models.CharField('Description',max_length=300)
 
     def __str__(self):
-            return self.name
+      return self.name
 
 class LHistory(models.Model):
-	userby = models.ForeignKey('auth.User',on_delete=models.CASCADE)
-	desc = models.CharField('Description',max_length=300)
-	h_date = models.DateTimeField('Date Created/Updated',auto_now_add=True)
+    userby = models.ForeignKey('auth.User',on_delete=models.CASCADE)
+    desc = models.CharField('Description',max_length=300)
+    h_date = models.DateTimeField('Date Created/Updated',auto_now_add=True)
 
-	def __str__(self):
-                return self.userby
-
+    def __str__(self):
+      return self.pk
 
 # Create your models here.
 class Letter(models.Model):
@@ -31,11 +30,6 @@ class Letter(models.Model):
     letter_desc = models.TextField('Description',blank=False,null=False)
     assigned_to = models.ForeignKey(LAssignTo,on_delete=models.CASCADE)
     created_date = models.DateTimeField('Date Key-In',auto_now_add=True)
-    # icnum = models.CharField('ID Number',max_length=12,unique=True,blank=False,null=False)
-    # name = models.TextField()
-    # name = models.CharField('Name',max_length=300)
-    # course = models.CharField('Courserwork',max_length=2,choices=COURSE_CHOICES,default=PCTECH,)
-    
 
     def __str__(self):
     	return self.letter_ref

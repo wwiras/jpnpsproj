@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from .models import Letter
+from .models import Letter, LHistory
+from django.contrib import messages
 from .forms import LetterForm, LetterForm2
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -13,6 +14,10 @@ def home(request):
     # return render(request, 'base_ori.html')
     return render(request, 'base.html')
 
+def home_json(request):
+    # return render(request, 'base_ori.html')
+    return render(request, 'letter/letter_home.html')
+
 def letter_new(request):
 
     if request.method == "POST":
@@ -22,15 +27,52 @@ def letter_new(request):
             letter = form.save(commit=False)
             # letter.createdby = request.user
             letter.save()
-            # return redirect('post_detail', pk=post.pk)
+            h = LHistory(userby=request.user, desc='Created')
+            h.save()
             messages.success(request, "Letter record with Reference Number : " + str(letter.pk) + " has been created ! ")
-            return redirect(reverse_lazy('letter_home'))
-            # return redirect(reverse_lazy('student_detail',kwargs={'pk': student.pk }))
+            # return redirect(reverse_lazy('letter_home'))
+            return redirect(reverse_lazy('letter_detail',kwargs={'pk': letter.pk }))
     else:
-        # form = LetterForm()
         form = LetterForm()
     
     return render(request, 'letter/letter_new.html', {'form': form})
+
+def letter_edit(request,pk):
+
+    letter = get_object_or_404(Letter, pk=pk)
+    if request.method == "POST":
+        form = LetterForm(request.POST,instance=letter)
+        if form.is_valid():
+            letter = form.save(commit=False)
+            letter.save()
+            h = LHistory(userby=request.user, desc='Updated')
+            h.save()
+            messages.success(request, "Letter Reference : " + str(letter.letter_ref) + " has been updated! ")
+            return redirect(reverse_lazy('letter_detail',kwargs={'pk': letter.pk }))
+    else:
+        # print(letter.letter_date)
+        # print(datetime.datetime.strptime(str(letter.letter_date), '%Y-%m-%d').strftime('%m/%d/%y'))
+        letter.letter_date = datetime.date.strftime(letter.letter_date, "%d-%m-%Y")
+        letter.letter_received = datetime.date.strftime(letter.letter_received, "%d-%m-%Y")
+        form = LetterForm(instance=letter)
+    
+    return render(request, 'letter/letter_edit.html', {'form': form})
+
+def letter_detail(request,pk):
+    letter = get_object_or_404(Letter, pk=pk)
+    return render(request, 'letter/letter_detail.html', {'letter': letter})
+
+def letter_remove(request,pk):
+
+    letter = get_object_or_404(Letter, pk=pk)
+    if request.method == "POST":
+        if request.POST.get("submit_yes", ""):
+            letter_ref = letter.letter_ref
+            letter.delete()
+            messages.success(request, "Letter record with Reference : " + str(letter_ref) + " has been removed! ")
+            return redirect(reverse_lazy('letter_home'))
+
+    return render(request, 'letter/letter_confirm_delete.html', {'letter': letter, 'pk':pk})
 
 
 # Letter JSON list filtering
@@ -75,7 +117,8 @@ class LetterListJson(BaseDatatableView):
           qs_params = None
 
           # Filtering other fields
-          q = Q(letter_ref__icontains=search)|Q(letter_from__icontains=search)
+          print(search)
+          q = Q(letter_ref__icontains=search)|Q(letter_from__icontains=search)|Q(letter_desc__icontains=search)
           qs_params = qs_params | q if qs_params else q
    
           # Completed Q queryset

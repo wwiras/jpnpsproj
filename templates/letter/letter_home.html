@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block head_title %}{% trans "SPMICT - Letter Registration System" %}{% endblock %}
+
+{% block content %}
+  <legend>SPMICT - Letter Registration System</legend>
+  <div class="table-responsive">
+  <table id="example" class="stripe">
+  <!-- <table id="example" class="display select table table-responsive" cellspacing="0" width="100%"> -->
+     <thead>
+        <tr>
+          <th>{% trans "Ref. Num" %}</th>
+          <th>{% trans "Received Date" %}</th>
+          <th>{% trans "Letter Date" %}</th>
+          <th>{% trans "From" %}</th>
+          <th>{% trans "Description" %}</th>
+        </tr>
+     </thead>
+  </table>
+  </div>
+
+  <p class="text-center">
+    <a href="{% url 'letter_new' %}" class="btn btn-primary" >Add New Letter</a>
+  </p>
+
+{% endblock %}
+
+
+{% block head_datatables_js %}    
+  <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>  
+{% endblock %}
+
+{% block head_datatables_css %} 
+  <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css"/>
+  <style>
+    table.dataTable.select tbody tr,
+    table.dataTable thead th:first-child {
+      cursor: pointer;
+    }
+  </style>
+{% endblock %}
+
+{% block head_datatables_script %} 
+   <script type="text/javascript">
+    $(document).ready(function() {
+      $('#example').DataTable( {
+        "processing": true,
+        "serverSide": true,
+        "ajax": '{% url "letter_list_json" %}',
+        "columnDefs": [ {
+          "targets": 0,
+          "render": function ( data, type, full, meta ) {
+            return '<a href='+ "{% url 'letter_home' %}" + full[5] +'>'+data+'</a>';
+            
+          }
+        } ]
+      } );
+    } );
+    </script>
+{% endblock %}
