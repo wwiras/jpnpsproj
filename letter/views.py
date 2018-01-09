@@ -145,8 +145,10 @@ class LetterListJson(BaseDatatableView):
         for item in qs:
             json_data.append([
                 item.letter_ref,
-                item.letter_received,
-                item.letter_date,
+                # item.letter_received,
+                datetime.datetime.strptime(str(item.letter_received), '%Y-%m-%d').strftime('%d-%m-%Y'),
+                # item.letter_date,
+                datetime.datetime.strptime(str(item.letter_date), '%Y-%m-%d').strftime('%d-%m-%Y'),
                 item.letter_from,
                 item.letter_desc,
                 str(item.pk),
