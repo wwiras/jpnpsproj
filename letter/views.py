@@ -9,15 +9,17 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.db.models import Count, Sum, Q, Case, Value, When, IntegerField
 import datetime
 
-# Create your views here.
+
 def home(request):
     # return render(request, 'base_ori.html')
     return render(request, 'base.html')
 
+@login_required(login_url='/accounts/login/')
 def home_json(request):
     # return render(request, 'base_ori.html')
     return render(request, 'letter/letter_home.html')
 
+@login_required(login_url='/accounts/login/')
 def letter_new(request):
 
     if request.method == "POST":
@@ -37,6 +39,7 @@ def letter_new(request):
     
     return render(request, 'letter/letter_new.html', {'form': form})
 
+@login_required(login_url='/accounts/login/')
 def letter_edit(request,pk):
 
     letter = get_object_or_404(Letter, pk=pk)
@@ -58,10 +61,12 @@ def letter_edit(request,pk):
     
     return render(request, 'letter/letter_edit.html', {'form': form})
 
+@login_required(login_url='/accounts/login/')
 def letter_detail(request,pk):
     letter = get_object_or_404(Letter, pk=pk)
     return render(request, 'letter/letter_detail.html', {'letter': letter})
 
+@login_required(login_url='/accounts/login/')
 def letter_remove(request,pk):
 
     letter = get_object_or_404(Letter, pk=pk)

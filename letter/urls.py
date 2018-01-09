@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/remove$', views.letter_remove, name='letter_remove'),
     url(r'^(?P<pk>\d+)/$', views.letter_detail, name='letter_detail'),
     url(r'^home/$', views.home, name='letter_home_json'),
-    url(r'^letter_list_json/$', views.LetterListJson.as_view(), name="letter_list_json"),
+    url(r'^letter_list_json/$', login_required(views.LetterListJson.as_view()), name="letter_list_json"),
     
     # url(r'^list/$', views.student_list, name='student_list'),
     # url(r'^new/$', views.student_new, name='student_new'),

@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'letter',
     'crispy_forms',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django.contrib.sites', #Kena taip sendiri
 ]
 
 MIDDLEWARE = [
@@ -69,8 +74,17 @@ TEMPLATES = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 WSGI_APPLICATION = 'jpnpsproj.wsgi.application'
 
+SITE_ID = 1
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -123,3 +137,37 @@ STATIC_URL = '/static/'
 
 # CRISPY_TEMPLATE_PACK = 'uni_form'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
+# ACCOUNT_ADAPTER (="allauth.account.adapter.DefaultAccountAdapter")
+ACCOUNT_AUTHENTICATION_METHOD = "username_email" #(="username" | "email" | "username_email")
+ACCOUNT_CONFIRM_EMAIL_ON_GET = False #(=False)
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = LOGIN_URL #(=settings.LOGIN_URL)
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL #(=None)
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 10 #(=3)
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = None #(="optional")
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "Subject is:" #(="[Site] "")
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
+# ACCOUNT_FORMS (={})
+# ACCOUNT_LOGIN_ATTEMPTS_LIMIT =5)
+# ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT (=300)
+ACCOUNT_LOGOUT_ON_GET = False
+# ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE (=False)
+ACCOUNT_LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
+# ACCOUNT_LOGOUT_REDIRECT_URL = LOGIN_URL
+ACCOUNT_SIGNUP_FORM_CLASS = None
+ACCOUNT_SIGNUP_PASSWORD_VERIFICATION =True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD ="username"
+ACCOUNT_USER_MODEL_EMAIL_FIELD ="email"
+# ACCOUNT_USER_DISPLAY (=a callable returning user.username)
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+# ACCOUNT_USERNAME_BLACKLIST (=[])
+ACCOUNT_USERNAME_REQUIRED =True
+ACCOUNT_PASSWORD_INPUT_RENDER_VALUE =False
+ACCOUNT_PASSWORD_MIN_LENGTH =6
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
