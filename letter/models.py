@@ -28,7 +28,8 @@ class Letter(models.Model):
     # letter_date = models.DateTimeField('Letter Date',blank=False,null=False)
     letter_from = models.CharField('Letter From',max_length=300,blank=False,null=False)
     letter_desc = models.TextField('Description',blank=False,null=False)
-    assigned_to = models.ForeignKey(LAssignTo,on_delete=models.CASCADE)
+    # assigned_to = models.ForeignKey(LAssignTo,on_delete=models.CASCADE)
+    assigned_to = models.ManyToManyField(LAssignTo)
     created_date = models.DateTimeField('Date Key-In',auto_now_add=True)
 
     def __str__(self):

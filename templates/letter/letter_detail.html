@@ -47,11 +47,11 @@
       
         <tr>
             <td>{% trans "Assigned to" %}</td>  
-            {% if letter.assigned_to %}  
-              <td>{{ letter.assigned_to }}</td>
+            {% if letter.assigned_to.all %}
+              <td>{% for a in letter.assigned_to.all %}{{ a.name }}<br>{% endfor %}</td>
             {% else %}
-              <td>{ N/A }</td>
-            {% endif %}   
+              <td>N/A</td>
+            {% endif %}
         </tr>
 
         <tr>

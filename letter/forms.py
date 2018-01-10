@@ -21,6 +21,8 @@ class LetterForm(forms.ModelForm):
         # source : https://stackoverflow.com/questions/19489699/how-to-add-class-id-placeholder-attributes-to-a-field-in-django-model-forms
         self.fields['letter_date'].widget.attrs={ 'class': 'mydatepicker','placeholder': 'DD-MM-YYYY'}
         self.fields['letter_received'].widget.attrs={ 'class': 'mydatepicker','placeholder': 'DD-MM-YYYY'}
+        # self.fields['assigned_to'].empty_label = None
+        # self.fields["assigned_to"].widget = forms.widgets.CheckboxSelectMultiple()
 
         # You can dynamically adjust your layout
         # self.helper.layout.append(Submit('save', 'save'))
@@ -33,34 +35,25 @@ class LetterForm(forms.ModelForm):
         model = Letter
         fields = ('letter_ref', 'letter_date', 'letter_received', 'letter_from','letter_desc','assigned_to')
 
-class LetterForm2(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(LetterForm2, self).__init__(*args, **kwargs)
+    # def save(self, commit=True):
 
-        # If you pass FormHelper constructor a form instance
-        # It builds a default layout with all its fields
-        self.helper = FormHelper(self)
-        self.helper['letter_date'].wrap(Layout.Field, wrapper_class="datePicker")
-        # self.helper = Fieldset(
-            # Field('letter_date', css_class='datePicker' , readonly='readonly', id="letter_date"),
-            # Field('date_end', id='date_end', css_class='input-small', readonly='readonly' ,template='datepicker.html'),   
-        # )
+        # child = super(ChildEditForm, self).save() # Save the child so we have an ID for the m2m
+        # letter = super(LetterForm, self).save() # Save the child so we have an ID for the m2m
 
-        # You can dynamically adjust your layout
-        # self.helper.layout.append(Submit('save', 'save'))
-        self.helper.form_class = 'form-horizontal'
-        self.helper.layout = Layout(
-           Fieldset('Letter Date',
-                    Field('letter_date', placeholder='Letter Date',css_class="datePicker")),
-        )
-        self.helper.layout.append(Submit('submit_change', 'Submit', css_class="btn-primary"))
-        self.helper.layout.append(HTML('<a class="btn btn-primary" href={% url "letter_home" %}>Reset</a>'))
+        # assigned_to = self.cleaned_data.get('assigned_to')
+        # print(assigned_to)
+        # for a in assigned_to:
+        #     print(a)
+        #     a.letter
+        # family = Family.objects.get(slug=family_slug)
+        # order = self.cleaned_data.get('order')
+        # FamilyChild.objects.create(family=family, child=child, order=order)
 
-    class Meta:
-        model = Letter
-        fields = ('letter_ref', 'letter_date', 'letter_received', 'letter_from','letter_desc','assigned_to')
+        # new_store = Store(name='Midtown',address='844 W Washington St...')
+        # new_store.save()
+        # wifi_amenity.store_set.add(new_store)
 
-
+        # return letter
         # letter_received = models.DateTimeField('Letter Received',blank=False,null=False)
         # letter_ref = models.CharField('Outside Ref. Number',unique=True,max_length=300,blank=False,null=False)
         # sector_ref = models.CharField('Sector Ref. Number',unique=True,max_length=300,blank=True,null=True)

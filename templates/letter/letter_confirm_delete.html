@@ -11,13 +11,13 @@
       <form method="post" class="form-horizontal">
         {% csrf_token %}
         {% if letter %}
-          <p>Are you sure you want to remove student record with ID : {{ letter.letter_ref }} ?</p>
+          <p>Are you sure you want to remove letter with Reference Number : {{ letter.letter_ref }} ?</p>
           <p>Warning ! This record/info will be removed for good.</p>
           <br>
           <button type="submit" name="submit_yes" value="Yes" class="btn btn-primary">Yes</button>
           <a href="{% url 'letter_home' %}" class="btn btn-primary">No</a>
         {% else %}
-          <p>Sorry! This student record is not available. It might be that this record has been removed or not created yet in this system</p>
+          <p>Sorry! This letter is not available. It might be that this record has been removed or not created yet in this system</p>
           <br>
           <a href="{% url 'letter_home' %}" class="btn btn-primary">Back</a>
         {% endif %}

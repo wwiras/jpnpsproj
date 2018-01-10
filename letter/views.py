@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from .models import Letter, LHistory
+from .models import Letter, LHistory, LAssignTo
 from django.contrib import messages
-from .forms import LetterForm, LetterForm2
+from .forms import LetterForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django_datatables_view.base_datatable_view import BaseDatatableView
@@ -26,14 +26,23 @@ def letter_new(request):
         # form = LetterForm(request.POST)
         form = LetterForm(request.POST)
         if form.is_valid():
-            letter = form.save(commit=False)
+
+            newletter = form.save(commit=False)
+            assigntoform = form.cleaned_data.get('assigned_to')
+            # print(assigntoform)
             # letter.createdby = request.user
-            letter.save()
+            # print(letter.assigned_to)
+            newletter.save()
+            for a in assigntoform:
+                assigntoobj = LAssignTo.objects.get(name=a)
+                assigntoobj.letter_set.add(newletter)
+            # print(form['assigned_to'])
+            # letter.save_m2m()
             h = LHistory(userby=request.user, desc='Created')
             h.save()
-            messages.success(request, "Letter record with Reference Number : " + str(letter.pk) + " has been created ! ")
+            messages.success(request, "Letter record with Reference Number : " + str(newletter.letter_ref) + " has been created ! ")
             # return redirect(reverse_lazy('letter_home'))
-            return redirect(reverse_lazy('letter_detail',kwargs={'pk': letter.pk }))
+            return redirect(reverse_lazy('letter_detail',kwargs={'pk': newletter.pk }))
     else:
         form = LetterForm()
     
@@ -42,28 +51,41 @@ def letter_new(request):
 @login_required(login_url='/accounts/login/')
 def letter_edit(request,pk):
 
-    letter = get_object_or_404(Letter, pk=pk)
+    editletter = get_object_or_404(Letter, pk=pk)
     if request.method == "POST":
-        form = LetterForm(request.POST,instance=letter)
+        form = LetterForm(request.POST,instance=editletter)
         if form.is_valid():
-            letter = form.save(commit=False)
-            letter.save()
+            
+            # Letter table
+            editletter = form.save(commit=False)
+            editletter.save()
+
+            # Updating Assign Table
+            # print(editletter.assigned_to.all())
+            editletter.assigned_to.clear()
+            # LAssignTo.letter_set.remove(letter) #Remove all 
+            assigntoform = form.cleaned_data.get('assigned_to')
+            for a in assigntoform:
+                a.letter_set.add(editletter)
+
+            # Updating Letter history
             h = LHistory(userby=request.user, desc='Updated')
             h.save()
-            messages.success(request, "Letter Reference : " + str(letter.letter_ref) + " has been updated! ")
-            return redirect(reverse_lazy('letter_detail',kwargs={'pk': letter.pk }))
+            messages.success(request, "Letter Reference : " + str(editletter.letter_ref) + " has been updated! ")
+            return redirect(reverse_lazy('letter_detail',kwargs={'pk': editletter.pk }))
     else:
         # print(letter.letter_date)
         # print(datetime.datetime.strptime(str(letter.letter_date), '%Y-%m-%d').strftime('%m/%d/%y'))
-        letter.letter_date = datetime.date.strftime(letter.letter_date, "%d-%m-%Y")
-        letter.letter_received = datetime.date.strftime(letter.letter_received, "%d-%m-%Y")
-        form = LetterForm(instance=letter)
+        editletter.letter_date = datetime.date.strftime(editletter.letter_date, "%d-%m-%Y")
+        editletter.letter_received = datetime.date.strftime(editletter.letter_received, "%d-%m-%Y")
+        form = LetterForm(instance=editletter)
     
     return render(request, 'letter/letter_edit.html', {'form': form})
 
 @login_required(login_url='/accounts/login/')
 def letter_detail(request,pk):
     letter = get_object_or_404(Letter, pk=pk)
+    # a = letter.assignto 
     return render(request, 'letter/letter_detail.html', {'letter': letter})
 
 @login_required(login_url='/accounts/login/')
